@@ -9,6 +9,7 @@ exports.items_register = async (req, res) => {
       return res.send(data);
    } catch (err) { return res.status(400).send(err.message); }
 }
+//update stock in return and new stock
 exports.item_update = async (req, res) => {
    try {
       const { id } = req.params;
@@ -19,11 +20,38 @@ exports.item_update = async (req, res) => {
 
 exports.item_get_active = async (req, res) => {
    try {
-      const { page, limit, active } = req.query;
+      const { page, limit, name, barcode } = req.query;
+
       let query = {};
-      query['active'] = Boolean(active);
+      if (name) query.name = name;
+      if (barcode) query.barcode = barcode;
       let data = await Item.aggregate([
          { $match: query },
+         {
+            $lookup:
+            {
+               from: "seller",
+               localField: "sellerId",
+               foreignField: "_id",
+               as: "seller"
+            }
+         }, {
+            $lookup:
+            {
+               from: "category",
+               localField: "categoryId",
+               foreignField: "_id",
+               as: "category"
+            }
+         }, {
+            $lookup:
+            {
+               from: "company",
+               localField: "companyId",
+               foreignField: "_id",
+               as: "company"
+            }
+         },
          {
             $facet: {
                metadata: [{ $count: "total_items" },

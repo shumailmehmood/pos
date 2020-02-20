@@ -1,21 +1,46 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
 const itemSchema = mongoose.Schema({
+    barcode: {
+        type: String,
+        require: true
+    },
     name: {
         type: String,
         require: true
     },
-    sale_price: {
+    salePrice: {
         type: Number,
         default: 0
     },
-    stock_in: {
+    purchasePrice: {
+        type: Number,
+        default: 0
+    },
+    stockIn: {
         type: Number,
         default: 0
     },
     active: {
         type: Boolean,
         default: true
+    },
+    companyId: {
+        type: ObjectId,
+        require: true
+    }
+    ,
+    sellerId: {
+        type: ObjectId,
+        require: true
+    },
+    categoryId: {
+        type: ObjectId,
+        require: true
+    },
+    endingLimit:{
+        type:Number,
+        require:true
     }
 }, { timestamps: true });
 
