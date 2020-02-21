@@ -9,7 +9,7 @@ const ItemController = require('../controllers/items');
 router.post('/login', UsersController.login);
 router.post('/registerCategory', CategoryController.register);
 router.post('/registerSeller', SellerController.reg);
-router.post('/registerCompany', CompanyController.reg);
+ router.post('/registerCompany', CompanyController.register);
 router.post('/registerItem', ItemController.items_register);
 //-----------------GET Requests------------------//
 router.get('/getAllCategories', CategoryController.get);

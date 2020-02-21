@@ -42,7 +42,7 @@ exports.validateUserLogin = (user) => {
 //     return Joi.validate(details, schema)
 // }
 exports.validate_item_reg = (details) => {
-    const schema = {     
+    const schema = {
         barcode: Joi.string().required(),
         name: Joi.string().required(),
         salePrice: Joi.number().integer(),
@@ -84,6 +84,27 @@ exports.validateSellerReg = (details) => {
         name: Joi.string().required(),
         cnic: Joi.string().required(),
         phoneNo: Joi.string().required(),
+    }
+    return Joi.validate(details, schema)
+}
+exports.validateDailySale = (details) => {
+    let service = Joi.object().keys({
+        barcode: Joi.string().required(),
+        name: Joi.string().required(),
+        salePrice: Joi.number().integer(),
+        purchasePrice: Joi.number().integer(),
+        companyId: Joi.object().required(),
+        sellerId: Joi.object().required(),
+        categoryId: Joi.object().required(),
+    })
+    const schema = {
+        orderNo: Joi.number().required(),
+        items: Joi.array().items(service),
+        subTotal: Joi.number().required(),
+        Discount: Joi.number().required(),
+        grandTotal: Joi.number().required(),
+        amountPayed: Joi.number().required(),
+        amountReturned: Joi.number().required()
     }
     return Joi.validate(details, schema)
 }
