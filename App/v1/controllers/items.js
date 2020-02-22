@@ -20,8 +20,9 @@ exports.item_update = async (req, res) => {
 
 exports.item_get_active = async (req, res) => {
    try {
-      const { page, limit, name, barcode } = req.query;
-
+      let { page, limit, name, barcode } = req.query;
+      page = page ? +page : 1;
+      limit = limit ? +limit : 10;
       let query = {};
       if (name) query.name = name;
       if (barcode) query.barcode = barcode;
@@ -33,25 +34,27 @@ exports.item_get_active = async (req, res) => {
                from: "seller",
                localField: "sellerId",
                foreignField: "_id",
-               as: "seller"
+               as: "seller_detail"
             }
-         }, {
-            $lookup:
-            {
-               from: "category",
-               localField: "categoryId",
-               foreignField: "_id",
-               as: "category"
-            }
-         }, {
-            $lookup:
-            {
-               from: "company",
-               localField: "companyId",
-               foreignField: "_id",
-               as: "company"
-            }
-         },
+         }
+         // , {
+         //    $lookup:
+         //    {
+         //       from: "category",
+         //       localField: "categoryId",
+         //       foreignField: "_id",
+         //       as: "category"
+         //    }
+         // }, {
+         //    $lookup:
+         //    {
+         //       from: "company",
+         //       localField: "companyId",
+         //       foreignField: "_id",
+         //       as: "company"
+         //    }
+         // },
+         ,
          {
             $facet: {
                metadata: [{ $count: "total_items" },
