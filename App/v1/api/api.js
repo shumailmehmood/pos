@@ -5,11 +5,13 @@ const CategoryController = require('../controllers/categories');
 const SellerController = require('../controllers/sellers');
 const CompanyController = require('../controllers/companies');
 const ItemController = require('../controllers/items');
+//----------------Test---------------
+router.get('/test',(req,res)=>res.send('Got It'))
 //-----------------POST Requests------------------//
 router.post('/login', UsersController.login);
 router.post('/registerCategory', CategoryController.register);
 router.post('/registerSeller', SellerController.reg);
-router.post('/registerCompany', CompanyController.reg);
+router.post('/registerCompany', CompanyController.register);
 router.post('/registerItem', ItemController.items_register);
 //-----------------GET Requests------------------//
 router.get('/getAllCategories', CategoryController.get);

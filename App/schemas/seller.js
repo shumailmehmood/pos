@@ -9,7 +9,7 @@ const sellerSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    password: {
+    phoneNo: {
         type: String,
         required: true,
     },

@@ -4,7 +4,9 @@ exports.register = async (req, res) => {
     try {
         const { error } = validateCategoryReg(req.body);
         if (error) return res.status(400).send(error.details[0].message);
-        let data = new Company(req.body);
+        let data = await Company.findOne({ 'name': req.body.name }).lean()
+        if (data) return res.status(400).send('Company against this name is already Registered')
+        data = new Company(req.body);
         data = await data.save();
         return res.send(data);
     } catch (err) { return res.status(400).send(err.message); }

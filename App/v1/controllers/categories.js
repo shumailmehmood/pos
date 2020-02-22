@@ -4,7 +4,9 @@ exports.register = async (req, res) => {
     try {
         const { error } = validateCategoryReg(req.body);
         if (error) return res.status(400).send(error.details[0].message);
-        let data = new Category(req.body);
+        let data = await Category.findOne({ 'name': req.body.name }).lean()
+        if (data) return res.status(400).send('Category against this name is already Registered')
+        data = new Category(req.body);
         data = await data.save();
         return res.send(data);
     } catch (err) { return res.status(400).send(err.message); }
@@ -19,7 +21,7 @@ exports.get = async (req, res) => {
 //for search
 exports.search = async (req, res) => {
     try {
-        const {id, name, page, limit } = req.query;
+        const { id, name, page, limit } = req.query;
         page = page ? +page : 1;
         limit = limit ? +limit : 10;
         let query = {};
