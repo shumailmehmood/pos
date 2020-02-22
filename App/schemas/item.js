@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.Types.ObjectId;
-const itemSchema = mongoose.Schema({
+const Item = mongoose.Schema({
     barcode: {
         type: String,
         require: true
@@ -27,24 +27,21 @@ const itemSchema = mongoose.Schema({
     },
     companyId: {
         type: ObjectId,
-        ref: 'Company',
-        require: true
+        ref: 'Company'
     }
     ,
     sellerId: {
         type: ObjectId,
         ref: 'Seller',
-        require: true
     },
     categoryId: {
         type: ObjectId,
-        ref: 'Category',
-        require: true
+        ref: 'Category'
     },
-    endingLimit:{
-        type:Boolean,
-        default:false
+    endingLimit: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Item', itemSchema);
+module.exports = mongoose.model('Item', Item);

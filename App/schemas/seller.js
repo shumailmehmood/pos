@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const sellerSchema = mongoose.Schema({
+const Seller = mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -18,4 +18,4 @@ const sellerSchema = mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Seller', sellerSchema);
+module.exports = mongoose.model('Seller', Seller);

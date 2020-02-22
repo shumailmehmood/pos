@@ -21,7 +21,9 @@ router.get('/getAllSellers', SellerController.get);
 router.get('/getSearchCompanies', CompanyController.search);
 router.get('/getAllCompanies', CompanyController.get);
 router.get('/getSearchItems', ItemController.item_get_active);
+router.get('/fetch', ItemController.fetch);
 //---------------PUT Request ------------------------//
-router.put('/updateStock', ItemController.item_update);
+router.put('/updateStock/:id', ItemController.item_update);
+router.put('/updateSeller/:id', SellerController.update);
 module.exports = router;
 
