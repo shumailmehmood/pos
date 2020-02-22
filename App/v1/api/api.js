@@ -11,7 +11,7 @@ router.get('/test',(req,res)=>res.send('Got It'))
 router.post('/login', UsersController.login);
 router.post('/registerCategory', CategoryController.register);
 router.post('/registerSeller', SellerController.reg);
-router.post('/registerCompany', CompanyController.register);
+ router.post('/registerCompany', CompanyController.register);
 router.post('/registerItem', ItemController.items_register);
 //-----------------GET Requests------------------//
 router.get('/getAllCategories', CategoryController.get);
