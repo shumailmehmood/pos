@@ -10,11 +10,12 @@ var app = express();
 require('dotenv').config()
 const appRoute = require('./App/v1/api/api');
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fivestar',
+mongoose.connect('mongodb://localhost/pos',
   { useNewUrlParser: true })
   .then(() => console.log('MongoDb successsFully Connected!!'))
   .catch(err => console.log('Errror in connecting mongodb', err));
-app.use(morgan());
+app.use(morgan());app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 app.use('/uploads/', express.static('uploads'))
 app.use(cors());
 app.use(express.json());

@@ -48,10 +48,10 @@ exports.validate_item_reg = (details) => {
         salePrice: Joi.number().integer(),
         purchasePrice: Joi.number().integer(),
         stockIn: Joi.number().integer(),
-        companyId: Joi.object().required(),
-        sellerId: Joi.object().required(),
-        categoryId: Joi.object().required(),
-        endingLimit: Joi.number().integer(),
+        companyId: Joi.required(),
+        sellerId: Joi.required(),
+        categoryId: Joi.required(),
+        endingLimit: Joi.boolean(),
 
     }
     return Joi.validate(details, schema)
@@ -74,7 +74,7 @@ exports.validate_item_reg = (details) => {
 // }
 exports.validateCategoryReg = (details) => {
     const schema = {
-        categoryName: Joi.string().required(),
+        name: Joi.string().required(),
     }
     return Joi.validate(details, schema)
 }

@@ -27,20 +27,23 @@ const itemSchema = mongoose.Schema({
     },
     companyId: {
         type: ObjectId,
+        ref: 'Company',
         require: true
     }
     ,
     sellerId: {
         type: ObjectId,
+        ref: 'Seller',
         require: true
     },
     categoryId: {
         type: ObjectId,
+        ref: 'Category',
         require: true
     },
     endingLimit:{
-        type:Number,
-        require:true
+        type:Boolean,
+        default:false
     }
 }, { timestamps: true });
 

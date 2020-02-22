@@ -4,7 +4,9 @@ exports.reg = async (req, res) => {
     try {
         const { error } = validateSellerReg(req.body);
         if (error) return res.status(400).send(error.details[0].message);
-        let data = new Seller(req.body);
+        let data = await Seller.findOne({ 'cnic': req.body.cnic }).lean()
+        if (data) return res.status(400).send('Seller against this CNIC is already Registered')
+         data = new Seller(req.body);
         data = await data.save();
         return res.send(data)
     } catch (err) { return res.status(400).send(err.message); }

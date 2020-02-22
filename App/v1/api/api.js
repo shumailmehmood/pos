@@ -5,6 +5,8 @@ const CategoryController = require('../controllers/categories');
 const SellerController = require('../controllers/sellers');
 const CompanyController = require('../controllers/companies');
 const ItemController = require('../controllers/items');
+//----------------Test---------------
+router.get('/test',(req,res)=>res.send('Got It'))
 //-----------------POST Requests------------------//
 router.post('/login', UsersController.login);
 router.post('/registerCategory', CategoryController.register);
