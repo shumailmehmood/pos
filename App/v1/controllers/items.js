@@ -1,5 +1,7 @@
 const { validate_item_reg } = require('../../validatingMethods/validate');
 const Item = require('../../schemas/item');
+const moment = require('moment')
+const DailySale = require('../../schemas/dailySale');
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Schema.Types.ObjectId;
 exports.items_register = async (req, res) => {
@@ -29,7 +31,15 @@ exports.item_update = async (req, res) => {
       return res.send(data)
    } catch (err) { return res.status(400).send(err.message); }
 }
-
+exports.item_update_del = async (req, res) => {
+   try {
+      let { barcode, stockIn } = req.query;
+      let data = await Item.findOne({ 'barcode': barcode }).select('stockIn').lean();
+      let add = +stockIn + data.stockIn;
+      data = await Item.findOneAndUpdate({ 'barcode': barcode }, { stockIn: add, endingLimit: add <= 10 ? true : false }, { new: true }).lean();
+      return res.send(data)
+   } catch (err) { return res.status(400).send(err.message); }
+}
 exports.item_get_active = async (req, res) => {
    try {
       let { page, limit, name, barcode } = req.query;
@@ -99,6 +109,7 @@ exports.fetch = async (req, res) => {
       const { barcode } = req.query;
       let data = await Item.findOne({ 'barcode': new RegExp(barcode, 'i') }).lean();
       if (data) {
+         if (+data.stockIn === 0) return res.status(400).send('Stock Ends')
          let stock = +data.stockIn - 1
          let body = {
             stockIn: stock,
@@ -109,4 +120,64 @@ exports.fetch = async (req, res) => {
       }
       return res.status(400).send("BarCode Not Registered")
    } catch (err) { return res.status(400).send(err.message); }
+}
+exports.salePost = async (req, res) => {
+   try {
+      let data = new DailySale(req.body);
+      data = await data.save();
+      return res.send(data);
+   } catch (err) {
+      return res.status(400).send(err.message);
+   }
+}
+exports.getOrder = async (req, res) => {
+   try {      
+      let query = { $gte: moment().startOf('day').toISOString(), $lte: moment().endOf('day').toISOString() }
+    
+
+      let data = await DailySale.find({ "createdAt": query }).select('orderNo').lean();
+      let count = 0;
+      data.forEach((element) => {
+         count++
+      })
+      count++;
+      if (data) return res.send(count.toString())
+      return res.send("1");
+   } catch (error) {
+      return res.status(400).send(error.message);
+   }
+}
+exports.dailySale = async (req, res) => {
+   try {
+      let { page, limit, name, barcode, orderNo, from } = req.query;
+      page = page ? +page : 1;
+      limit = limit ? +limit : 10;
+      let query = {};
+      if (name) query.name = new RegExp(name, "i");
+      if (barcode) query.barcode = new RegExp(barcode, "i");
+      if (orderNo) query.orderNo = +orderNo;
+      if (from) query["createdAt"] = { $gte: moment(from).startOf('day').toISOString(), $lte: moment(from).endOf('day').toISOString() }
+      let count = await DailySale.find(query)
+         .count()
+         .lean()
+      let data = await DailySale.find(query)
+         .limit(limit)
+         .skip(page * limit - limit)
+         .lean();
+
+      let obj = {
+         metadata: [
+            {
+               total_items: count,
+               page: page,
+               limit: limit,
+               pages: Math.ceil(count / limit)
+            }
+         ],
+         data: data
+      }
+
+      return res.send(obj);
+   } catch (err) { return res.status(400).send(err.message); }
+
 }

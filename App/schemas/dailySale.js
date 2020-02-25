@@ -5,7 +5,8 @@ const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
 let dSaleSchema = mongoose.Schema({
     orderNo: {
         type: Number,
-        required: true
+        required: true,
+        default: 1
     },
     items: [{
         barcode: {
@@ -31,6 +32,10 @@ let dSaleSchema = mongoose.Schema({
         sellerId: {
             type: ObjectId,
             require: true
+        },
+        quantity:{
+            type: Number,
+            default: 0
         },
         categoryId: {
             type: ObjectId,
@@ -59,10 +64,10 @@ let dSaleSchema = mongoose.Schema({
         required: true
     },
 }, { timestamps: true })
-dSaleSchema.virtual('orderNo').get(function () {
-    return 'OID-' + this.uId
-})
+// dSaleSchema.virtual('orderNo').get(function () {
+//     return 'OID-' + this.orderNo
+// })
 
-// Now, the `userId` property will show up even if you do a lean query
-dSaleSchema.plugin(mongooseLeanVirtuals);
+// // Now, the `userId` property will show up even if you do a lean query
+// dSaleSchema.plugin(mongooseLeanVirtuals);
 module.exports = mongoose.model('DailySale', dSaleSchema)
