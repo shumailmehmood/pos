@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node ./bin/www"
+  },
+  "engines": {
+    "node":"10.15.3"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
