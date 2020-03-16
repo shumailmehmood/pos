@@ -107,7 +107,9 @@ exports.item_get_active = async (req, res) => {
 exports.fetch = async (req, res) => {
    try {
       const { barcode } = req.query;
-      let data = await Item.findOne({ 'barcode': new RegExp(barcode, 'i') }).lean();
+      if(!barcode)return res.status(201).send();
+      let data = await Item.findOne({ 'barcode': barcode }).lean();
+     
       if (data) {
          if (+data.stockIn === 0) return res.status(400).send('Stock Ends')
          let stock = +data.stockIn - 1
